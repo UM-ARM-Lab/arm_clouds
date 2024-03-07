@@ -15,6 +15,7 @@ class PointCloudList(BaseTypeList[PointCloud]):
 
     def __init__(self, initlist=None):
         # Special constructors just for PointCloudList
+        # NOTE: This assumes just XYZ data. For XYZ and RGB, use the append_create_cloud() method.
         if isinstance(initlist, (torch.Tensor, np.ndarray)):
             super().__init__()
             self._from_xyz_matrix(initlist)
