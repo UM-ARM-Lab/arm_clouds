@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import ABCMeta, abstractmethod
 from typing import List, TypeVar, Generic, Optional, Iterable, Iterator
 from collections import UserList
 
@@ -12,7 +12,7 @@ T = TypeVar('T', bound=BaseTypeMixin)
 
 # Generic[T] means that we can use the type template that BaseTypeList was initialized with in the
 # class body.
-class BaseTypeList(UserList, Generic[T]):
+class BaseTypeList(UserList, Generic[T], metaclass=ABCMeta):
     """The base type that all CDCPD-type lists inherit from."""
     data: List[T]
 
