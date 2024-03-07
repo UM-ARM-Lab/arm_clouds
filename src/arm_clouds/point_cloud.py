@@ -6,9 +6,7 @@ import open3d as o3d
 import plotly.graph_objects as go
 
 from .base_type_mixin import BaseTypeMixin
-from .plotly_util import (make_update_menus, make_sliders, FRAME_DURATION_MS_DEFAULT)
-# from cdcpd_torch.visualization.plotly.util import (make_update_menus, make_sliders,
-#                                                    FRAME_DURATION_MS_DEFAULT)
+from .plotly_util import POINT_CLOUD_MARKER_SIZE, POINT_CLOUD_OPACITY, DEFAULT_POINT_CLOUD_COLOR
 
 
 class PointCloud(BaseTypeMixin):
@@ -234,11 +232,11 @@ class PointCloud(BaseTypeMixin):
         o3d.visualization.draw_geometries([pcd])
 
     def form_plotly_scatter3d_kwargs(self,
-                                     marker_size: int = 2,
+                                     marker_size: int = POINT_CLOUD_MARKER_SIZE,
                                      trace_name: str = None,
-                                     color: str = None,
+                                     color: str = DEFAULT_POINT_CLOUD_COLOR,
                                      markers_only: bool = True,
-                                     opacity: float = 1.0):
+                                     opacity: float = POINT_CLOUD_OPACITY):
         """Creates the nested dictionary that can be use to make a plotly Scatter3d object
 
         NOTE: This shouldn't be called directly to visualize the point cloud. Instead, call
@@ -313,7 +311,7 @@ class PointCloud(BaseTypeMixin):
 
         return kwargs
 
-    def visualize_plotly(self, marker_size=2):
+    def visualize_plotly(self, marker_size=POINT_CLOUD_MARKER_SIZE):
         """Visualizes the tracked template in a plotly figure"""
         scatter_kwargs = self.form_plotly_scatter3d_kwargs(marker_size=marker_size)
         trace = [go.Scatter3d(**scatter_kwargs)]
