@@ -15,7 +15,7 @@ class PointCloud(BaseTypeMixin):
 
     def __init__(self,
                  xyz: Union[torch.Tensor, np.ndarray],
-                 rgb: Union[torch.Tensor, np.ndarray] = None):
+                 rgb: Optional[Union[torch.Tensor, np.ndarray]] = None):
         """Initializes the point cloud with XYZ and optional RGB data
 
         Parameters
@@ -34,9 +34,12 @@ class PointCloud(BaseTypeMixin):
             # warning when inputting XYZ clouds with the wrong dimensions eventually.
             raise ValueError(f"Expected `xyz` of shape [3, N] but got shape {xyz.shape} instead")
 
-        self.xyz = xyz
-        self.is_torch = isinstance(self.xyz, torch.Tensor)
-        self.has_rgb = False
+        self.xyz: Union[torch.Tensor, np.ndarray] = xyz
+        self.is_torch: bool = isinstance(self.xyz, torch.Tensor)
+
+        self.rgb: Optional[Union[torch.Tensor, np.ndarray]] = None
+        self.has_rgb: bool = False
+        self.is_rgb_normalized: bool = False
         self.add_rgb(rgb)
 
     def to_numpy(self):
@@ -152,7 +155,7 @@ class PointCloud(BaseTypeMixin):
         if is_torch_orig:
             self.to_torch(dtype_orig, device_orig)
 
-        if not is_rgb_normalized_orig:
+        if self.has_rgb and (not is_rgb_normalized_orig):
             self.unnormalize_rgb()
 
     def apply_extrinsic(self, ext: Union[np.ndarray, torch.Tensor]):
